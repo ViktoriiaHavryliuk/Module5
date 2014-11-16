@@ -113,7 +113,6 @@ public class MyLinkedList<T> implements MyList<T> {
             }
         };
     }
-
     class Node<T> {
         public T value;
         public Node<T> next;
