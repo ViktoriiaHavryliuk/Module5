@@ -4,7 +4,6 @@ import java.util.Arrays;
 
 public class MyArrayList<E> {
 
-    private boolean isEmpty;
     private int sizeOfList;
     private E[] basicArray;
 
@@ -14,7 +13,7 @@ public class MyArrayList<E> {
 
     public MyArrayList(int sizeOfList) {
         if (sizeOfList < 0) {
-            throw new RuntimeException("Size of collection can't be negative");
+            throw new IndexOutOfBoundsException("Size of collection can't be negative");
         }
         basicArray = (E[]) new Object[sizeOfList];
     }
@@ -24,16 +23,14 @@ public class MyArrayList<E> {
     }
 
     public boolean isEmpty() {
-        return basicArray.length == 0;
+        return sizeOfList == 0;
     }
 
     public void add(E element) {
-        if (isHasFreeCells(sizeOfList+1)) {
+        if (!isHasFreeCells(sizeOfList+1)) {
             int newSize = (sizeOfList * 3) / 2 + 1;
             basicArray = Arrays.copyOf(basicArray, newSize);
-        } else {
-        throw new IndexOutOfBoundsException("List is full. Impossible to add new element");
-    }
+        } 
         basicArray[sizeOfList++] = element;
     }
 
@@ -44,22 +41,27 @@ public class MyArrayList<E> {
             basicArray[index] = element;
             sizeOfList++;
         } else {
-            throw new IndexOutOfBoundsException("List is full. Impossible to add new element");
+            int newSize = (sizeOfList * 3) / 2 + 1;
+            basicArray = Arrays.copyOf(basicArray, newSize);
         }
     }
 
     public boolean isHasFreeCells(int newSize){
+
         return true ? basicArray.length>=newSize : false;
     }
 
     public E getElement(int index) {
+        if (isEmpty()){
+            throw new IndexOutOfBoundsException();
+        }
         return basicArray[index];
     }
 
     public int getIndex(E element) {
         int result = -1;
         for (int i = 0; i < basicArray.length; i++) {
-            if (basicArray[i].equals(element)) {
+            if (basicArray[i].equals(element)) {//Objects.equals is better
                 result = i;
             }
         }
@@ -67,6 +69,9 @@ public class MyArrayList<E> {
     }
 
     public void setElement(int index, E value) {
+        if (isEmpty()){
+            throw new IndexOutOfBoundsException();
+        }
         basicArray[index] = value;
     }
 
@@ -86,6 +91,7 @@ public class MyArrayList<E> {
         for (int i = 0; i < sizeOfList; i++) {
             basicArray[i] = null;
         }
+        sizeOfList = 0;
     }
 
 }
